@@ -1,7 +1,7 @@
 {
   "name": "insta-clone",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,26 +11,26 @@
   },
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",
-    "@chakra-ui/react": "^2.10.1",
+    "@chakra-ui/react": "^2.10.3",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "firebase": "^10.14.0",
-    "framer-motion": "^11.11.4",
+    "firebase": "^11.0.1",
+    "framer-motion": "^11.11.11",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-firebase-hooks": "^5.1.1",
     "react-icons": "^5.3.0",
-    "react-router-dom": "^6.26.2",
+    "react-router-dom": "^6.28.0",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
-    "@types/react": "^18.3.11",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.2",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
     "eslint": "^8.57.1",
-    "eslint-plugin-react": "^7.37.1",
+    "eslint-plugin-react": "^7.37.2",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.12",
-    "vite": "^5.4.8"
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "vite": "^5.4.10"
   }
 }

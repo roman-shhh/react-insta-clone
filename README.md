@@ -15,7 +15,7 @@
 <img height="250" alt="Home page" src="https://github.com/user-attachments/assets/2659b6ea-cea1-4638-be59-d3f0ef857fc0">
 
 
-[Live demo](https://instagram-clone-90e12.web.app/)
+[Live demo](https://instagram-clone-90e12.firebaseapp.com/)
 
 Instagram clone project with basic functionality
 

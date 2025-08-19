@@ -1,4 +1,4 @@
-# Intagram clone
+# Instagram clone
 
 ## Table of Contents
 

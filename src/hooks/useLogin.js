@@ -10,7 +10,6 @@ export const useLogin = () => {
 
   const [
     signInWithEmailAndPassword,
-    user,
     loading,
     error
   ] = useSignInWithEmailAndPassword(auth)

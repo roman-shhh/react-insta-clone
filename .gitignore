@@ -24,4 +24,14 @@ dist-ssr
 *.sw?
 
 .env
-.firebase
+.firebase/
+# Vite/React/TypeScript/Testing/Other
+.env.*
+!.env.example
+.eslintcache
+coverage
+.parcel-cache
+.turbo
+vite.svg.d.ts
+.next
+*.tsbuildinfo

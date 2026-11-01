@@ -7,7 +7,7 @@ import useFollowUser from "../../hooks/useFollowUser"
 export const ProfileHeader = () => {
   const { userProfile } = useUserProfileStore();
   const authUser = useAuthStore(state => state.user);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open: isOpen, onOpen, onClose } = useDisclosure();
   const { isFollowing, isUpdating, handleFollowUser } = useFollowUser(userProfile?.uid);
 
   const visitingOwnProfileAndAuth = authUser && authUser.username === userProfile.username;
@@ -16,7 +16,7 @@ export const ProfileHeader = () => {
   return (
     <Flex gap={{base:4,sm:10}} py={10} direction={{base:"column", sm:"row"}}>
       <AvatarGroup size={{base:"xl", md:"2xl"}} justifySelf={"center"} alignSelf={"flex-start"} mx={"auto"}>
-        <Avatar src={userProfile.profilePicURL} alt="User Name logo" />
+        <Avatar.Root><Avatar.Fallback /><Avatar.Image src={userProfile.profilePicURL} alt="User Name logo" /></Avatar.Root>
       </AvatarGroup>
 
       <VStack alignItems={"start"} gap={2} mx={"auto"} flex={1}>
@@ -47,7 +47,7 @@ export const ProfileHeader = () => {
                 _hover={{bg:"blue.600"}}
                 size={{base:"xs", md:"sm"}}
                 onClick={handleFollowUser}
-                isLoading={isUpdating}
+                loading={isUpdating}
               >
                 {isFollowing ? 'Unfollow' : 'Follow'}
               </Button>
@@ -81,5 +81,5 @@ export const ProfileHeader = () => {
 
       {isOpen && <EditProfile isOpen={isOpen} onClose={onClose} />}
     </Flex>
-  )
+  );
 }

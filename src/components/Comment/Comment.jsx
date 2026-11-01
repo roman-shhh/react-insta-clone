@@ -11,7 +11,7 @@ export const Comment = ({ comment }) => {
   return (
     <Flex gap={4}>
       <Link to={`/${userProfile.username}`}>
-        <Avatar src={userProfile.profilePicURL} size={"sm"} />
+        <Avatar.Root size={"sm"}><Avatar.Fallback /><Avatar.Image src={userProfile.profilePicURL} /></Avatar.Root>
       </Link>
       <Flex direction={"column"}>
         <Flex gap={2} alignItems={"center"}>
@@ -31,7 +31,7 @@ export const Comment = ({ comment }) => {
       </Flex>
 
     </Flex>
-  )
+  );
 }
 
 const CommentSkeleton = () => {

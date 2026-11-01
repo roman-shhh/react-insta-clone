@@ -1,33 +1,36 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { ChakraProvider, extendTheme } from '@chakra-ui/react'
-import { mode } from '@chakra-ui/theme-tools'
-import { BrowserRouter } from 'react-router-dom'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ChakraProvider, createSystem, defaultConfig, defineConfig } from "@chakra-ui/react";
+import App from "./App.jsx";
+import { ColorModeProvider } from "./components/ui/color-mode.jsx";
+import { Toaster } from "./components/ui/toaster.jsx";
+import "./index.css";
+import { BrowserRouter } from "react-router-dom";
 
-const styles = {
-  global:(props) => ({
-    body: {
-      bg:mode("gray.100", "#000")(props),
-      color:mode("gray.800", "whiteAlpha.900")(props)
-    }
-  })
-}
+const config = defineConfig({
+  globalCss: {
+    "html, body": {
+      bg: "gray.100",
+      color: "gray.800",
+      _dark: {
+        bg: "#000",
+        color: "white",
+      },
+    },
+  },
+});
 
-const config = {
-  initialColorMode: 'dark',
-  useSystemColorMode: false,
-}
+const system = createSystem(defaultConfig, config);
 
-const theme = extendTheme({ config, styles })
-
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ChakraProvider theme={theme}>
-        <App />
-      </ChakraProvider>
-    </BrowserRouter>
+    <ChakraProvider value={system}>
+      <ColorModeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+        <Toaster />
+      </ColorModeProvider>
+    </ChakraProvider>
   </React.StrictMode>,
-)
+);

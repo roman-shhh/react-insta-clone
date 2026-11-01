@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text, useDisclosure } from "@chakra-ui/react"
+import { Box, Button, Flex, Input, InputGroup, Text, useDisclosure } from "@chakra-ui/react"
 import { useRef, useState } from "react"
 import { CommentLogo, NotificationsLogo, UnlikeLogo } from "../../assets/constants"
 import usePostComment from "../../hooks/usePostComment"
@@ -13,7 +13,7 @@ export const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
   const authUser = useAuthStore((state) => state.user);
   const commentRef = useRef(null)
   const { handleLikePost, isLiked, likes } = useLikePost(post)
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { open, onOpen, onClose } = useDisclosure();
 
   const handleSubmitComment = async () => {
 		await handlePostComment(post.id, comment);
@@ -50,13 +50,29 @@ export const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
             <Text color={"gray"} fontSize={"sm"} cursor={"pointer"} onClick={onOpen}>View all {post.comments.length} comments</Text>
           )}
           {/* COMMENTS MODAL ONLY IN THE HOME PAGE */}
-					{isOpen ? <CommentsModal isOpen={isOpen} onClose={onClose} post={post} /> : null}
+					{open ? <CommentsModal isOpen={open} onClose={onClose} post={post} /> : null}
         </>
       )}
 
       {authUser &&
         (<Flex alignItems={"center"} gap={2} justifyContent={"space-between"} w={"full"}>
-          <InputGroup>
+          <InputGroup
+            endElement={
+              <Button
+                type="button"
+                fontSize={14}
+                color={"blue.500"}
+                fontWeight={600}
+                cursor={"pointer"}
+                _hover={{ color: "white" }}
+                bg={"transparent"}
+                onClick={handleSubmitComment}
+                loading={isCommenting}
+              >
+                Post
+              </Button>
+            }
+          >
             <Input
               variant={"flushed"}
               placeholder={"Add a comment..."}
@@ -65,23 +81,9 @@ export const PostFooter = ({ post, isProfilePage, creatorProfile }) => {
               value={comment}
               ref={commentRef}
             />
-            <InputRightElement>
-              <Button
-                fontSize={14}
-                color={"blue.500"}
-                fontWeight={600}
-                cursor={"pointer"}
-                _hover={{color:"white"}}
-                bg={"transparent"}
-                onClick={handleSubmitComment}
-                isLoading={isCommenting}
-              >
-                Post
-              </Button>
-            </InputRightElement>
           </InputGroup>
         </Flex>)
       }
     </Box>
-  )
+  );
 }

@@ -7,11 +7,11 @@ const PostHeader = ({ post, creatorProfile }) => {
 	const { handleFollowUser, isFollowing, isUpdating } = useFollowUser(post.createdBy);
 
 	return (
-		<Flex justifyContent={"space-between"} alignItems={"center"} w={"full"} my={2}>
-			<Flex alignItems={"center"} gap={2}>
+        <Flex justifyContent={"space-between"} alignItems={"center"} w={"full"} my={2}>
+            <Flex alignItems={"center"} gap={2}>
 				{creatorProfile ? (
 					<Link to={`/${creatorProfile.username}`}>
-						<Avatar src={creatorProfile.profilePicURL} alt='user profile pic' size={"sm"} />
+						<Avatar.Root size={"sm"}><Avatar.Fallback /><Avatar.Image src={creatorProfile.profilePicURL} alt='user profile pic' /></Avatar.Root>
 					</Link>
 				) : (
 					<SkeletonCircle size='10' />
@@ -27,7 +27,7 @@ const PostHeader = ({ post, creatorProfile }) => {
 					<Box color={"gray.500"}>• {timeAgo(post.createdAt)}</Box>
 				</Flex>
 			</Flex>
-			<Box cursor={"pointer"}>
+            <Box cursor={"pointer"}>
 				<Button
 					size={"xs"}
 					bg={"transparent"}
@@ -39,13 +39,13 @@ const PostHeader = ({ post, creatorProfile }) => {
 					}}
 					transition={"0.2s ease-in-out"}
 					onClick={handleFollowUser}
-					isLoading={isUpdating}
+					loading={isUpdating}
 				>
 					{isFollowing ? "Unfollow" : "Follow"}
 				</Button>
 			</Box>
-		</Flex>
-	);
+        </Flex>
+    );
 };
 
 export default PostHeader;

@@ -18,8 +18,8 @@ const ProfilePosts = () => {
 			columnGap={1}
 		>
 			{isLoading &&
-				[0, 1, 2].map((_, idx) => (
-					<VStack key={idx} alignItems={"flex-start"} gap={4}>
+				["first", "second", "third"].map((key) => (
+					<VStack key={key} alignItems={"flex-start"} gap={4}>
 						<Skeleton w={"full"}>
 							<Box h='300px'>contents wrapped</Box>
 						</Skeleton>

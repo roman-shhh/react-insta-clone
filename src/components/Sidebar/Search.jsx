@@ -1,11 +1,12 @@
-import { Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Tooltip, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, Input, useDisclosure, Field, Dialog, Portal } from "@chakra-ui/react";
+import { Tooltip } from '../ui/tooltip';
 import { SearchLogo } from "../../assets/constants";
 import useSearchUser from "../../hooks/useSearchUser";
 import { useRef } from "react";
 import SuggestedUser from "../SuggestedUsers/SuggestedUser";
 
 const Search = () => {
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { open: isOpen, onOpen, onClose } = useDisclosure();
 	const searchRef = useRef(null);
 	const { user, isLoading, getUserProfile, setUser } = useSearchUser();
 
@@ -15,14 +16,16 @@ const Search = () => {
 	};
 
 	return (
-		<>
-			<Tooltip
-				hasArrow
-				label={"Search"}
-				placement='right'
+        <>
+            <Tooltip
+				showArrow
+				content={"Search"}
 				ml={1}
 				openDelay={500}
 				display={{ base: "block", md: "none" }}
+				positioning={{
+                    placement: 'right'
+                }}
 			>
 				<Flex
 					alignItems={"center"}
@@ -39,30 +42,40 @@ const Search = () => {
 				</Flex>
 			</Tooltip>
 
-			<Modal isOpen={isOpen} onClose={onClose} motionPreset='slideInLeft'>
-				<ModalOverlay />
-				<ModalContent bg={"black"} border={"1px solid gray"} maxW={"400px"}>
-					<ModalHeader>Search user</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody pb={6}>
-						<form onSubmit={handleSearchUser}>
-							<FormControl>
-								<FormLabel>Username</FormLabel>
-								<Input placeholder='username' ref={searchRef} />
-							</FormControl>
+            <Dialog.Root open={isOpen} motionPreset='slideInLeft' onOpenChange={e => {
+                if (!e.open) {
+                    onClose();
+                }
+            }}>
+                <Portal>
 
-							<Flex w={"full"} justifyContent={"flex-end"}>
-								<Button type='submit' ml={"auto"} size={"sm"} my={4} isLoading={isLoading}>
-									Search
-								</Button>
-							</Flex>
-						</form>
-						{user && <SuggestedUser user={user} setUser={setUser} />}
-					</ModalBody>
-				</ModalContent>
-			</Modal>
-		</>
-	);
+                    <Dialog.Backdrop />
+                    <Dialog.Positioner>
+                        <Dialog.Content bg={"black"} border={"1px solid gray"} maxW={"400px"}>
+                            <Dialog.Header>Search user</Dialog.Header>
+                            <Dialog.CloseTrigger />
+                            <Dialog.Body pb={6}>
+                                <form onSubmit={handleSearchUser}>
+                                    <Field.Root>
+                                        <Field.Label>Username</Field.Label>
+                                        <Input placeholder='username' ref={searchRef} />
+                                    </Field.Root>
+
+                                    <Flex w={"full"} justifyContent={"flex-end"}>
+                                        <Button type='submit' ml={"auto"} size={"sm"} my={4} loading={isLoading}>
+                                            Search
+                                        </Button>
+                                    </Flex>
+                                </form>
+                                {user && <SuggestedUser user={user} setUser={setUser} />}
+                            </Dialog.Body>
+                        </Dialog.Content>
+                    </Dialog.Positioner>
+
+                </Portal>
+            </Dialog.Root>
+        </>
+    );
 };
 
 export default Search;

@@ -7,11 +7,11 @@ const Caption = ({ post }) => {
 	const userProfile = useUserProfileStore((state) => state.userProfile);
 
 	return (
-		<Flex gap={4}>
-			<Link to={`/${userProfile.username}`}>
-				<Avatar src={userProfile.profilePicURL} size={"sm"} />
+        <Flex gap={4}>
+            <Link to={`/${userProfile.username}`}>
+				<Avatar.Root size={"sm"}><Avatar.Fallback /><Avatar.Image src={userProfile.profilePicURL} /></Avatar.Root>
 			</Link>
-			<Flex direction={"column"}>
+            <Flex direction={"column"}>
 				<Flex gap={2} alignItems={"center"}>
 					<Link to={`/${userProfile.username}`}>
 						<Text fontWeight={"bold"} fontSize={12}>
@@ -24,8 +24,8 @@ const Caption = ({ post }) => {
 					{timeAgo(post.createdAt)}
 				</Text>
 			</Flex>
-		</Flex>
-	);
+        </Flex>
+    );
 };
 
 export default Caption;

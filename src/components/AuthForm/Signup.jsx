@@ -1,7 +1,7 @@
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons"
-import { Alert, AlertIcon, Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
+import { Alert, Button, Input, InputGroup } from "@chakra-ui/react";
 import { useState } from "react"
 import { useSignUpWithEmailAndPassword } from "../../hooks/useSignUpWithEmailAndPassword"
+import { LuEye, LuEyeOff } from 'react-icons/lu';
 
 export const Signup = () => {
   const [inputs, setInputs] = useState({
@@ -14,7 +14,7 @@ export const Signup = () => {
   const [showPassword, setShowPassword] = useState(false)
   const { loading, error, signup } = useSignUpWithEmailAndPassword()
 
-  return(
+  return (
     <>
       <Input
         placeholder="Email"
@@ -43,7 +43,18 @@ export const Signup = () => {
         onChange={(e) => setInputs({ ...inputs, fullName: e.target.value })}
       />
 
-      <InputGroup>
+      <InputGroup
+        endElement={
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <LuEye /> : <LuEyeOff />}
+          </Button>
+        }
+      >
         <Input
           placeholder="Password"
           fontSize={14}
@@ -52,31 +63,25 @@ export const Signup = () => {
           value={inputs.password}
           onChange={(e) => setInputs({ ...inputs, password: e.target.value })}
         />
-
-        <InputRightElement h={"full"}>
-          <Button variant={"ghost"} size={"sm"} onClick={() => setShowPassword(!showPassword)}>
-            {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-          </Button>
-        </InputRightElement>
       </InputGroup>
 
       {error && (
-        <Alert status="error" fontSize={13} p={2} borderRadius={4}>
-          <AlertIcon fontSize={14} />
+        <Alert.Root status="error" fontSize={13} p={2} borderRadius={4}>
+          <Alert.Indicator fontSize={14} />
           {error.message}
-        </Alert>
+        </Alert.Root>
       )}
 
       <Button
         w={"full"}
-        colorScheme="blue"
+        colorPalette="blue"
         size={"sm"}
         fontSize={14}
-        isLoading={loading}
+        loading={loading}
         onClick={() => signup(inputs)}
       >
         Sign Up
       </Button>
     </>
-  )
+  );
 }

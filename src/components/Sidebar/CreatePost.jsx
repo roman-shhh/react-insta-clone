@@ -1,4 +1,16 @@
-import { Box, Button, CloseButton, Flex, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Textarea, Tooltip, useDisclosure } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    CloseButton,
+    Flex,
+    Image,
+    Input,
+    Textarea,
+    useDisclosure,
+    Dialog,
+    Portal,
+} from "@chakra-ui/react";
+import { Tooltip } from '../ui/tooltip';
 import { CreatePostLogo } from "../../assets/constants";
 import { BsFillImageFill } from "react-icons/bs";
 import { useRef, useState } from "react";
@@ -13,7 +25,7 @@ import { firestore, storage } from "../../firebase/firebase";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 
 const CreatePost = () => {
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { open: isOpen, onOpen, onClose } = useDisclosure();
 	const [caption, setCaption] = useState("");
 	const imageRef = useRef(null);
 	const { handleImageChange, selectedFile, setSelectedFile } = usePreviewImg();
@@ -32,14 +44,16 @@ const CreatePost = () => {
 	};
 
 	return (
-		<>
-			<Tooltip
-				hasArrow
-				label={"Create"}
-				placement='right'
+        <>
+            <Tooltip
+				showArrow
+				content={"Create"}
 				ml={1}
 				openDelay={500}
 				display={{ base: "block", md: "none" }}
+				positioning={{
+                    placement: 'right'
+                }}
 			>
 				<Flex
 					alignItems={"center"}
@@ -56,50 +70,60 @@ const CreatePost = () => {
 				</Flex>
 			</Tooltip>
 
-			<Modal isOpen={isOpen} onClose={onClose} size='xl'>
-				<ModalOverlay />
+            <Dialog.Root open={isOpen} size='xl' onOpenChange={e => {
+                if (!e.open) {
+                    onClose();
+                }
+            }}>
+                <Portal>
 
-				<ModalContent bg={"black"} border={"1px solid gray"}>
-					<ModalHeader>Create Post</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody pb={6}>
-						<Textarea
-							placeholder='Post caption...'
-							value={caption}
-							onChange={(e) => setCaption(e.target.value)}
-						/>
+                    <Dialog.Backdrop />
 
-						<Input type='file' hidden ref={imageRef} onChange={handleImageChange} />
+                    <Dialog.Positioner>
+                        <Dialog.Content bg={"black"} border={"1px solid gray"}>
+                            <Dialog.Header>Create Post</Dialog.Header>
+                            <Dialog.CloseTrigger />
+                            <Dialog.Body pb={6}>
+                                <Textarea
+                                    placeholder='Post caption...'
+                                    value={caption}
+                                    onChange={(e) => setCaption(e.target.value)}
+                                />
 
-						<BsFillImageFill
-							onClick={() => imageRef.current.click()}
-							style={{ marginTop: "15px", marginLeft: "5px", cursor: "pointer" }}
-							size={16}
-						/>
-						{selectedFile && (
-							<Flex mt={5} w={"full"} position={"relative"} justifyContent={"center"}>
-								<Image src={selectedFile} alt='Selected img' />
-								<CloseButton
-									position={"absolute"}
-									top={2}
-									right={2}
-									onClick={() => {
-										setSelectedFile(null);
-									}}
-								/>
-							</Flex>
-						)}
-					</ModalBody>
+                                <Input type='file' hidden ref={imageRef} onChange={handleImageChange} />
 
-					<ModalFooter>
-						<Button mr={3} onClick={handlePostCreation} isLoading={isLoading}>
-							Post
-						</Button>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
-		</>
-	);
+                                <BsFillImageFill
+                                    onClick={() => imageRef.current.click()}
+                                    style={{ marginTop: "15px", marginLeft: "5px", cursor: "pointer" }}
+                                    size={16}
+                                />
+                                {selectedFile && (
+                                    <Flex mt={5} w={"full"} position={"relative"} justifyContent={"center"}>
+                                        <Image src={selectedFile} alt='Selected img' />
+                                        <CloseButton
+                                            position={"absolute"}
+                                            top={2}
+                                            right={2}
+                                            onClick={() => {
+                                                setSelectedFile(null);
+                                            }}
+                                        />
+                                    </Flex>
+                                )}
+                            </Dialog.Body>
+
+                            <Dialog.Footer>
+                                <Button mr={3} onClick={handlePostCreation} loading={isLoading}>
+                                    Post
+                                </Button>
+                            </Dialog.Footer>
+                        </Dialog.Content>
+                    </Dialog.Positioner>
+
+                </Portal>
+            </Dialog.Root>
+        </>
+    );
 };
 
 export default CreatePost;

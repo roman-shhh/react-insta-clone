@@ -1,4 +1,4 @@
-import { Alert, AlertIcon, Button, Input } from "@chakra-ui/react"
+import { Alert, Button, Input } from "@chakra-ui/react";
 import { useState } from "react"
 import { useLogin } from "../../hooks/useLogin"
 
@@ -31,16 +31,16 @@ export const Login = () => {
       />
 
       {error && (
-        <Alert status="error" fontSize={13} p={2} borderRadius={4}>
-          <AlertIcon fontSize={14} />
+        <Alert.Root status="error" fontSize={13} p={2} borderRadius={4}>
+          <Alert.Indicator fontSize={14} />
           {error.message}
-        </Alert>
+        </Alert.Root>
       )}
 
       <Button
         w={"full"}
-        colorScheme="blue"
-        isLoading={loading}
+        colorPalette="blue"
+        loading={loading}
         size={"sm"}
         fontSize={14}
         onClick={() => login(inputs)}
@@ -48,5 +48,5 @@ export const Login = () => {
         Log in
       </Button>
     </>
-  )
+  );
 }

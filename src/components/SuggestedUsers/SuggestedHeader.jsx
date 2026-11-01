@@ -13,7 +13,7 @@ export const SuggestedHeader = () => {
     <Flex justifyContent={"space-between"} alignItems={"center"} w={"full"}>
       <Flex alignItems={"center"} gap={2}>
         <Link to={`${authUser.username}`}>
-          <Avatar size={"lg"} src={authUser.profilePicURL} />
+          <Avatar.Root size={"lg"}><Avatar.Fallback /><Avatar.Image src={authUser.profilePicURL} /></Avatar.Root>
         </Link>
         <Link to={`${authUser.username}`}>
           <Box fontSize={12} fontWeight={"bols"}>{authUser.username}</Box>
@@ -28,11 +28,11 @@ export const SuggestedHeader = () => {
         fontWeight={"medium"}
         color={"blue.400"}
         cursor="pointer"
-        isLoading={isLoggingOut}
+        loading={isLoggingOut}
         onClick={handleLogout}
       >
         Log out
       </Button>
     </Flex>
-  )
+  );
 }

@@ -24,9 +24,9 @@ export const SuggestedUser = ({ user, setUser }) => {
     <Flex justifyContent={"space-between"} alignItems={"center"} w={"full"}>
       <Flex alignItems={"center"} gap={2}>
         <Link to={`/${user.username}`}>
-          <Avatar src={user.profilePicURL} size={"md"} />
+          <Avatar.Root size={"md"}><Avatar.Fallback /><Avatar.Image src={user.profilePicURL} /></Avatar.Root>
         </Link>
-        <VStack spacing={2} alignItems={"flex-start"}>
+        <VStack gap={2} alignItems={"flex-start"}>
           <Link to={`/${user.username}`}>
             <Box fontSize={12} fontWeight={"bold"}>{user.fullName}</Box>
           </Link>
@@ -44,13 +44,13 @@ export const SuggestedUser = ({ user, setUser }) => {
           cursor={"pointer"}
           _hover={{color:"white"}}
           onClick={onFollowUser}
-          isLoading={isUpdating}
+          loading={isUpdating}
         >
           {isFollowing ? "Unfollow" : "Follow"}
         </Button>
       }
     </Flex>
-  )
+  );
 }
 
 export default SuggestedUser;

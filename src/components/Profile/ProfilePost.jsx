@@ -1,4 +1,16 @@
-import { Avatar, Button, Divider, Flex, GridItem, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text, VStack, useDisclosure } from "@chakra-ui/react";
+import {
+    Avatar,
+    Button,
+    Flex,
+    GridItem,
+    Image,
+    Text,
+    VStack,
+    useDisclosure,
+    Separator,
+    Dialog,
+    Portal,
+} from "@chakra-ui/react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaComment } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
@@ -15,7 +27,7 @@ import usePostStore from "../../store/postStore";
 import Caption from "../Comment/Caption";
 
 const ProfilePost = ({ post }) => {
-	const { isOpen, onOpen, onClose } = useDisclosure();
+	const { open: isOpen, onOpen, onClose } = useDisclosure();
 	const userProfile = useUserProfileStore((state) => state.userProfile);
 	const authUser = useAuthStore((state) => state.user);
 	const showToast = useShowToast();
@@ -48,8 +60,8 @@ const ProfilePost = ({ post }) => {
 	};
 
 	return (
-		<>
-			<GridItem
+        <>
+            <GridItem
 				cursor={"pointer"}
 				borderRadius={4}
 				overflow={"hidden"}
@@ -92,72 +104,82 @@ const ProfilePost = ({ post }) => {
 				<Image src={post.imageURL} alt='profile post' w={"100%"} h={"100%"} objectFit={"cover"} />
 			</GridItem>
 
-			<Modal isOpen={isOpen} onClose={onClose} isCentered={true} size={{ base: "3xl", md: "5xl" }}>
-				<ModalOverlay />
-				<ModalContent>
-					<ModalCloseButton />
-					<ModalBody bg={"black"} pb={5}>
-						<Flex
-							gap='4'
-							w={{ base: "90%", sm: "70%", md: "full" }}
-							mx={"auto"}
-							maxH={"90vh"}
-							minH={"50vh"}
-						>
-							<Flex
-								borderRadius={4}
-								overflow={"hidden"}
-								border={"1px solid"}
-								borderColor={"whiteAlpha.300"}
-								flex={1.5}
-								justifyContent={"center"}
-								alignItems={"center"}
-							>
-								<Image src={post.imageURL} alt='profile post' />
-							</Flex>
-							<Flex flex={1} flexDir={"column"} px={10} display={{ base: "none", md: "flex" }}>
-								<Flex alignItems={"center"} justifyContent={"space-between"}>
-									<Flex alignItems={"center"} gap={4}>
-										<Avatar src={userProfile.profilePicURL} size={"sm"} />
-										<Text fontWeight={"bold"} fontSize={12}>
-											{userProfile.username}
-										</Text>
-									</Flex>
+            <Dialog.Root open={isOpen} placement='center' size={{ base: "3xl", md: "5xl" }} onOpenChange={e => {
+                if (!e.open) {
+                    onClose();
+                }
+            }}>
+                <Portal>
 
-									{authUser?.uid === userProfile.uid && (
-										<Button
-											size={"sm"}
-											bg={"transparent"}
-											_hover={{ bg: "whiteAlpha.300", color: "red.600" }}
-											borderRadius={4}
-											p={1}
-											onClick={handleDeletePost}
-											isLoading={isDeleting}
-										>
-											<MdDelete size={20} cursor='pointer' />
-										</Button>
-									)}
-								</Flex>
-								<Divider my={4} bg={"gray.500"} />
+                    <Dialog.Backdrop />
+                    <Dialog.Positioner>
+                        <Dialog.Content>
+                            <Dialog.CloseTrigger />
+                            <Dialog.Body bg={"black"} pb={5}>
+                                <Flex
+                                    gap='4'
+                                    w={{ base: "90%", sm: "70%", md: "full" }}
+                                    mx={"auto"}
+                                    maxH={"90vh"}
+                                    minH={"50vh"}
+                                >
+                                    <Flex
+                                        borderRadius={4}
+                                        overflow={"hidden"}
+                                        border={"1px solid"}
+                                        borderColor={"whiteAlpha.300"}
+                                        flex={1.5}
+                                        justifyContent={"center"}
+                                        alignItems={"center"}
+                                    >
+                                        <Image src={post.imageURL} alt='profile post' />
+                                    </Flex>
+                                    <Flex flex={1} flexDir={"column"} px={10} display={{ base: "none", md: "flex" }}>
+                                        <Flex alignItems={"center"} justifyContent={"space-between"}>
+                                            <Flex alignItems={"center"} gap={4}>
+                                                <Avatar.Root size={"sm"}><Avatar.Fallback /><Avatar.Image src={userProfile.profilePicURL} /></Avatar.Root>
+                                                <Text fontWeight={"bold"} fontSize={12}>
+                                                    {userProfile.username}
+                                                </Text>
+                                            </Flex>
 
-								<VStack w='full' alignItems={"start"} maxH={"350px"} overflowY={"auto"}>
-									{/* CAPTION */}
-									{post.caption && <Caption post={post} />}
-									{/* COMMENTS */}
-									{post.comments.map((comment) => (
-										<Comment key={comment.id} comment={comment} />
-									))}
-								</VStack>
-								<Divider my={4} bg={"gray.8000"} />
+                                            {authUser?.uid === userProfile.uid && (
+                                                <Button
+                                                    size={"sm"}
+                                                    bg={"transparent"}
+                                                    _hover={{ bg: "whiteAlpha.300", color: "red.600" }}
+                                                    borderRadius={4}
+                                                    p={1}
+                                                    onClick={handleDeletePost}
+                                                    loading={isDeleting}
+                                                >
+                                                    <MdDelete size={20} cursor='pointer' />
+                                                </Button>
+                                            )}
+                                        </Flex>
+                                        <Separator my={4} bg={"gray.500"} />
 
-								<PostFooter isProfilePage={true} post={post} />
-							</Flex>
-						</Flex>
-					</ModalBody>
-				</ModalContent>
-			</Modal>
-		</>
-	);
+                                        <VStack w='full' alignItems={"start"} maxH={"350px"} overflowY={"auto"}>
+                                            {/* CAPTION */}
+                                            {post.caption && <Caption post={post} />}
+                                            {/* COMMENTS */}
+                                            {post.comments.map((comment) => (
+                                                <Comment key={comment.id} comment={comment} />
+                                            ))}
+                                        </VStack>
+                                        <Separator my={4} bg={"gray.8000"} />
+
+                                        <PostFooter isProfilePage={true} post={post} />
+                                    </Flex>
+                                </Flex>
+                            </Dialog.Body>
+                        </Dialog.Content>
+                    </Dialog.Positioner>
+
+                </Portal>
+            </Dialog.Root>
+        </>
+    );
 };
 
 export default ProfilePost;
